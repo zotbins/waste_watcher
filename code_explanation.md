@@ -1,8 +1,3 @@
----
-title: "Instructables Drafts"
-tags: ""
----
-
 # Code Explanation
 
 First, I would really like to thank and acknowledge [Random Nerd Tutorials](https://randomnerdtutorials.com/) for giving the resources and tutorials needed to help me develop this script. They make all their tutorials free and also do their best to help out their community and give so many valuble resources for makers. Please check them out!
