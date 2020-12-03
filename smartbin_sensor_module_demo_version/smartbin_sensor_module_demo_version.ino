@@ -131,7 +131,6 @@ void configInitCamera(){
 
 void getDateTime() {
   timeClient.begin();
-  timeClient.setTimeOffset(-25200); // offset for PST
   while(!timeClient.update()) {
     timeClient.forceUpdate();
   }
