@@ -13,6 +13,8 @@
 // - https://techtutorialsx.com/2020/09/06/esp32-writing-file-to-sd-card/
 // - https://www.instructables.com/Select-SD-Interface-for-ESP32/
 // - https://randomnerdtutorials.com/esp32-cam-ai-thinker-pinout/
+// - https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/
+// - https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/gpio.html
 
 #include "esp_camera.h"
 #include "Arduino.h"
@@ -41,7 +43,7 @@ const int ultrasonicEchoPin = 12;
 #define TIME_TO_SLEEP 1800 /* TIME ESP32 will go to sleep in sec */ 
 
 // === other parameters ===
-const int binHeight = 100; // units: cm, used to calculate fullness
+const int binHeight = 50; // units: cm, used to calculate fullness
 const int ultraMinRange = 2; //units: cm, min. limit of accurate HC-SR04 reading
 const int ultraMaxRange = 400; //units: cm, max. limit of accurate HC-SR04 reading
 const char* datalogFile = "/data.csv";
@@ -179,6 +181,8 @@ void takePhoto() {
 }
 
 void fullnessRead(){
+  rtc_gpio_hold_dis(GPIO_NUM_13);
+  rtc_gpio_hold_dis(GPIO_NUM_12);
   for (int i = 0; i < 5; ++i )
   {
     // clear trigger pin 
@@ -208,6 +212,12 @@ void fullnessRead(){
       return; 
     }
   }
+  
+  // Turn off signal pins
+  digitalWrite(ultrasonicTrigPin,LOW);
+  digitalWrite(ultrasonicTrigPin,LOW);
+  rtc_gpio_hold_en(GPIO_NUM_13);
+  rtc_gpio_hold_en(GPIO_NUM_12);
 }
 
 void writeFile(fs::FS &fs, const char * path, const char * message){
@@ -306,15 +316,13 @@ void setup() {
 
   Serial.println("Setup finished");
   Serial.println();
-  
-}
 
-void loop() {
-  
   // === take a photo ===
+  rtc_gpio_hold_dis(GPIO_NUM_4);
   digitalWrite(FLASH_LED_PIN,HIGH);
   takePhoto(); // will also automatically update the datetimeStamp
   digitalWrite(FLASH_LED_PIN,LOW);
+  rtc_gpio_hold_en(GPIO_NUM_4);
 
   // === get distance reading ===
   fullnessRead();
@@ -341,5 +349,9 @@ void loop() {
   delay(1000);
   Serial.flush(); 
   esp_deep_sleep_start();
+  
+}
+
+void loop() {
   
 }
