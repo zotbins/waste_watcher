@@ -272,7 +272,7 @@ void sdSetup() {
   if(!file) {
     file.close();
     Serial.println("File doesn't exist");
-    writeFile(SD_MMC, datalogFile, "Datetimestamp,fullness(cm),count");
+    writeFile(SD_MMC, datalogFile, "Datetimestamp,fullness(cm),count\n");
     return;
   }
   else {
