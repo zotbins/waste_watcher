@@ -4,7 +4,7 @@ First, I would really like to thank and acknowledge [Random Nerd Tutorials](http
 
 ### Library Imports
 
-Here we, include all the libraries we need for our script. These library enable us to use the ESP32 Camera, write to the microSD card, connect to WiFi, and determine the time using NTP. 
+Here we, include all the libraries we need for our script. These library enable us to use the ESP32 Camera, write to the microSD card, connect to WiFi, and determine the time using NTP.
 
 ```c
 #include "esp_camera.h"
@@ -22,7 +22,7 @@ Here we, include all the libraries we need for our script. These library enable 
 
 ### Script Parameters and Variables
 
-This is where we define our WiFi credentials. Make sure that you have changed those parameters so that the ESP32 CAM can properly connect to a WiFi network. This is important for determining the time. 
+This is where we define our WiFi credentials. Make sure that you have changed those parameters so that the ESP32 CAM can properly connect to a WiFi network. This is important for determining the time.
 
 ```c
 // === wifi credentials ===
@@ -31,23 +31,23 @@ const char* WIFI_SSID = "CHANGE_TO_YOUR_WIFI_SSID";
 const char* WIFI_PASS = "CHANGE_TO_YOUR_WIFI_PASSWORD";
 ```
 
-If you have a need to change the pin assignment for the HC-SR04, feel free to change it here, but it is not reccomended because the SD card reader will be using other pins. 
+If you have a need to change the pin assignment for the HC-SR04, feel free to change it here, but it is not reccomended because the SD card reader will be using other pins.
 
 ```c
-// === peripherals pin assignment === 
+// === peripherals pin assignment ===
 const int ultrasonicTrigPin = 13;
 const int ultrasonicEchoPin = 12;  
 ```
 
-This here determines the time the ESP32 CAM should go into deep sleep. In this script, it will be sleeping for 1,800 seconds or 30 minutes. Deep sleep helps reduce energy consumption when nothing is being done. You can feel free to change the time to sleep value. 
+This here determines the time the ESP32 CAM should go into deep sleep. In this script, it will be sleeping for 1,800 seconds or 30 minutes. Deep sleep helps reduce energy consumption when nothing is being done. You can feel free to change the time to sleep value.
 
 ```c
-// === deep sleep === 
+// === deep sleep ===
 #define uS_TO_S_FACTOR 1000000 /* conversion factor for usec to sec */
-#define TIME_TO_SLEEP 1800 /* TIME ESP32 will go to sleep in sec */ 
+#define TIME_TO_SLEEP 1800 /* TIME ESP32 will go to sleep in sec */
 ```
 
-Here we define all our other parameters used for determining the fullness level, figuring out where to save our fullness data, saving the datetime stamp, creating the NTP Client object, and defining all the pins for the AI THINKER ESP32 CAM model. 
+Here we define all our other parameters used for determining the fullness level, figuring out where to save our fullness data, saving the datetime stamp, creating the NTP Client object, and defining all the pins for the AI THINKER ESP32 CAM model.
 
 ```c
 // === other parameters ===
@@ -119,10 +119,10 @@ Here we set up all the camera connections and also any configuration settings fo
   config.pixel_format = PIXFORMAT_JPEG;
 ```
 
-This is where we define the resolution of our image quality. You can change these settings to help you increase or reduce the image quality. Please read comments for more details. You can specify the jpeg quality and also the frame size such as UXGA, SGXGA, SVGA, etc. 
+This is where we define the resolution of our image quality. You can change these settings to help you increase or reduce the image quality. Please read comments for more details. You can specify the jpeg quality and also the frame size such as UXGA, SGXGA, SVGA, etc.
 
 ```c
-  //=== init with high specs to pre-allocate larger buffers === 
+  //=== init with high specs to pre-allocate larger buffers ===
   if(psramFound()){
     Serial.println("PSRAM found");
     config.frame_size = FRAMESIZE_UXGA;
@@ -135,13 +135,13 @@ This is where we define the resolution of our image quality. You can change thes
     config.fb_count = 1;
   }
 
-  // === Init Camera === 
+  // === Init Camera ===
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK) {
     Serial.printf("Camera init failed with error 0x%x", err);
     return;
   }
-  
+
   // Drop down frame size for higher initial frame rate
   sensor_t * s = esp_camera_sensor_get();
   s->set_framesize(s, FRAMESIZE_UXGA);  // UXGA|SXGA|XGA|SVGA|VGA|CIF|QVGA|HQVGA|QQVGA
@@ -153,7 +153,7 @@ I think the comments should cover the explanation here, please just read the com
 
 ### fullnessRead() function
 
-I also think the comments should cover the explanation, please read the comments int the function. 
+I also think the comments should cover the explanation, please read the comments int the function.
 
 ### getDateTime() function
 
@@ -169,14 +169,14 @@ void getDateTime() {
   datetimeStamp = timeClient.getFormattedDate(); //format: 2018-04-30T16:00:13Z
   datetimeStamp.replace(":","-"); // get rid of colons
 
-  //=== end the client === 
+  //=== end the client ===
   timeClient.end();
 }
 ```
 
 ### writeFile() function
 
-This is a function that writes a file to an SD card. You can see that it takes the `path` parameter, which is the path to the file you want to save in the SD card, and also the `message` parameter specifies what message you want to save in the file. This will write a new file if the file doesn't exist or overwrite an existing one if the same file already exists. We already defined a variable to write to the files `data.csv` 
+This is a function that writes a file to an SD card. You can see that it takes the `path` parameter, which is the path to the file you want to save in the SD card, and also the `message` parameter specifies what message you want to save in the file. This will write a new file if the file doesn't exist or overwrite an existing one if the same file already exists. We already defined a variable to write to the files `data.csv`
 
 ```c
 void writeFile(fs::FS &fs, const char * path, const char * message){
@@ -218,24 +218,24 @@ void appendFile(fs::FS &fs, const char * path, const char * message){
 
 ### sdSetup() function
 
-The very first part of this function simply mounts the SD card. Next once, the card is mounted successfully, we detect the card. Most SD cards nowadays are MMC, which stands for MultiMediaCard. So if you notice I do `SD_MMC.begin("/sdcard",true)` in the if statement. This will set the SD card up in 1-bit SD bus mode as opposed to 4-bit SD bus mode. This means that the transfer rate for data will be slower, but at the same time it frees up GPIO pins 12 and 13 for us to use with the ultrasonic sensor. For more details about SD bus modes please refer to the _Additional Resources_ section below. The rest of this code simply creates the `data.csv` file if it doesn't exist already. 
+The very first part of this function simply mounts the SD card. Next once, the card is mounted successfully, we detect the card. Most SD cards nowadays are MMC, which stands for MultiMediaCard. So if you notice I do `SD_MMC.begin("/sdcard",true)` in the if statement. This will set the SD card up in 1-bit SD bus mode as opposed to 4-bit SD bus mode. This means that the transfer rate for data will be slower, but at the same time it frees up GPIO pins 12 and 13 for us to use with the ultrasonic sensor. For more details about SD bus modes please refer to the _Additional Resources_ section below. The rest of this code simply creates the `data.csv` file if it doesn't exist already.
 
 ```c
 void sdSetup() {
-  // === sd card setup === 
+  // === sd card setup ===
   // Card Mounting
   Serial.println("Starting SD Card");
   if(!SD_MMC.begin("/sdcard", true)){
     Serial.println("SD Card Mount Failed");
     return;
   }
-  
+
   //Detect Card
   uint8_t cardType = SD_MMC.cardType();
   if(cardType == CARD_NONE){
     Serial.println("No SD Card attached");
     return;
-  } 
+  }
 
   // If the data.txt file doesn't exist
   // Create a file on the SD card and write the data labels
@@ -255,14 +255,14 @@ void sdSetup() {
 
 ### setup() function
 
-The setup function first sets up the serial monitor so that you can debug anything by opening the serial monitor. Then we setup everything we need such as the ultrasonic sensor, the SD card, it connects to WiFi, and also setups the camera. 
+The setup function first sets up the serial monitor so that you can debug anything by opening the serial monitor. Then we setup everything we need such as the ultrasonic sensor, the SD card, it connects to WiFi, and also setups the camera.
 
 ```c
 void setup() {
   Serial.begin(115200);
   Serial.println("Setup has started...");
 
-  // === deep sleep setup === 
+  // === deep sleep setup ===
   esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
   Serial.println("Setup ESP32 to sleep for every " + String(TIME_TO_SLEEP) + " Seconds");
 
@@ -270,9 +270,9 @@ void setup() {
   pinMode(ultrasonicTrigPin, OUTPUT);
   pinMode(ultrasonicEchoPin, INPUT);
 
-  // === sd card setup === 
+  // === sd card setup ===
   sdSetup();
-  
+
   // === wifi setup ===
   Serial.print("Connecting to ");
   Serial.println(WIFI_SSID);
@@ -286,24 +286,24 @@ void setup() {
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-  
-  // === camera setup === 
+
+  // === camera setup ===
   pinMode( FLASH_LED_PIN, OUTPUT); // Setup flash
-  configInitCamera(); // Setup camera 
+  configInitCamera(); // Setup camera
 
   Serial.println("Setup finished");
   Serial.println();
-  
+
 }
 ```
 
 ### loop() function
 
-This function is really the main function that helps us run all the tasks that we want to do. It takes a photo, gets the distance reading and writes everything to the SD card. Once everything is written to the SD, we go into deep sleep mode. This allows the device to reduce its energy consumption which is very useful when running on a battery source. 
+This function is really the main function that helps us run all the tasks that we want to do. It takes a photo, gets the distance reading and writes everything to the SD card. Once everything is written to the SD, we go into deep sleep mode. This allows the device to reduce its energy consumption which is very useful when running on a battery source.
 
 ```c
 void loop() {
-  
+
   // === take a photo ===
   digitalWrite(FLASH_LED_PIN,HIGH);
   takePhoto(); // will also automatically update the datetimeStamp
@@ -311,12 +311,12 @@ void loop() {
 
   // === get distance reading ===
   fullnessRead();
-  
+
   // === write data to sd card ===
-  //update the datetime stamp 
+  //update the datetime stamp
   getDateTime();
   //create data message
-  dataMessage = datetimeStamp + "," + String(fullness) + "\n"; 
+  dataMessage = datetimeStamp + "," + String(fullness) + "\n";
   Serial.print("Writing ");
   Serial.print(dataMessage);
   Serial.println();
@@ -328,13 +328,13 @@ void loop() {
 
   // write to sd card
   appendFile(SD_MMC, datalogFile, charBuf);
-  
+
   // === sleep timer ===
   Serial.println("Going to sleep now");
   delay(1000);
-  Serial.flush(); 
+  Serial.flush();
   esp_deep_sleep_start();
-  
+
 }
 ```
 
