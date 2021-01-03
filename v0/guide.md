@@ -173,7 +173,7 @@ However, if you want a more in-depth explanation, I made a PDF document and made
 
 ![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/sensor_mod_v0_enclosure.png)
 
-1. Download the the STL files from https://github.com/zotbins/simple_waste_data_logger/tree/main/stl_files
+1. Download the the STL files from https://github.com/zotbins/waste_watcher/tree/main/v0/stl_files
 2. Infill: 10%
 3. Supports: Everywhere
 3. Print two of the *sensor_mod_handle.stl*
