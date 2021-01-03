@@ -2,7 +2,7 @@
 
 This is the alpha version of the ZotBins Community Edition Waste Watcher, a sensor module unit that collects bin fullness data and takes images of the trash. This build guide will walk you through the steps of setting everything up. If you need additional help feel free to ask for help on our [Discord Server](https://discord.com/invite/mGKVVpxTPr).
 
-![feature photo](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/feature_photo.jpg)
+![feature photo](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/feature_photo.jpg)
 
 ## Features
 - Portable Battery Powered Module
@@ -23,7 +23,7 @@ This is the alpha version of the ZotBins Community Edition Waste Watcher, a sens
 11. Start Data Logging
 
 ## 1. Supplies
-![supplies](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/supplies_materials.jpg)
+![supplies](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/supplies_materials.jpg)
 ### Materials Needed
 - ESP32-CAM (~$9 per unit)
 - 2 or 4GB micro SD card* (~$3.60 per unit)
@@ -54,21 +54,21 @@ This is the alpha version of the ZotBins Community Edition Waste Watcher, a sens
 
 1. **Use a 4cm x 3cm prototyping board.** This will be approximately the same size as the ESP32 CAM. I cut a 4cm x 6cm board in half to get that size.
 
-    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/circuit_assembly_1.jpg)
+    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/circuit_assembly_1.jpg)
 
 2. **Use two 8-pin female headers and place it on the center of board for the ESP32-CAM.** I just cut a 20 pin female header piece to get the 8-pin female headers.
 
-    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/circuit_assembly_1.jpg)
+    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/circuit_assembly_1.jpg)
 
 3. **(Optional) Place a 2-pin screw terminal block connector near the top.** You can use this to conveniently plug in my battery pack of 3 AA batteries. If you don't follow this step just solder the wires from your battery pack directly into the prototyping board.
 4. **Solder wires for HC-SR04 and the 5V Boost Converter.** These wires will be used to connect the components to the prototyping board.
 5. **Solder Components.** Once everything is placed, just solder those components in place. See image above of my setup for reference.
 6. **Plug in your ESP32 CAM into the female headers for referencing the pins.** Helps you see which pins for the female headers correspond to which pin on the ESP32 CAM.
 
-    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/circuit_assembly_3.jpg)
+    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/circuit_assembly_3.jpg)
 7. **Solder connections according to wiring diagram below.**
 
-    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/v0_circuit.png)
+    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/v0_circuit.png)
 
 **Circuit Explanation**
 
@@ -89,7 +89,7 @@ By the end of this tutorial you should have the following:
 
 ## 4. Select AI Thinker ESP32-CAM as Board in the Arduino IDE
 
-![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/arduino_ide.png)
+![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/arduino_ide.png)
 
 Refer to the picture above for reference.
 
@@ -106,7 +106,7 @@ We'll be using Wifi and connecting to a NTP server to keep automatically determi
 
 3. Move the folder to your Arduino IDE installation libraries folder. On Windows, I move the folder here: `C:\Users\REPLACE_WITH_YOUR_USERNAME\Documents\Arduino\libraries`
 
-    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/NTP_client_reference.png)
+    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/NTP_client_reference.png)
 NTP_client_reference.png
 4. Restart the Arduino IDE
 
@@ -116,9 +116,9 @@ Now that you have all the software setup. Let's start with programming the ESP32
 1. Get your FT232RL FTDI USB to TTL Serial Adapter Module (FTDI Adapter) and your Female to Female Jumper Wires
 2. Connect the FTDI Adapter pins to your ESP32-CAM according to the diagram below
 
-    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/ftdi_circuit_design.png)
+    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/ftdi_circuit_design.png)
 
-    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/ftdi_connection.jpg)
+    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/ftdi_connection.jpg)
 
 
 3. Plug in your FTDI Adapter USB side to the computer and make sure that your computer is able to recognize the device. If your computer does not recognize the device follow these steps:
@@ -135,7 +135,7 @@ Now, we're going to download the code and make some changes so that everything w
 1. Download the *smartbin_sensor_module_demo_version.ino* file from GitHub: https://github.com/zotbins/waste_watcher
 2. Open up the code in the Arduino IDE
 
-    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/coding_parameters_reference.png)
+    ![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/coding_parameters_reference.png)
 
 3. In the Arduino IDE, make sure you select the port your FTDI Adapter device is on. **Tools > Port**
 4. Change the following variables to match your WiFi Network
@@ -158,11 +158,11 @@ Now, we're going to download the code and make some changes so that everything w
 ## 8. Understanding the Code
 *Feel free to skip this section if you are not interested or just save it for later.*
 
-![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/software_diagram.png)
+![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/software_diagram.png)
 
 Above, is a quick high-level flow chart that shows the logic of the code. It is pretty simple.
 
-However, if you want a more in-depth explanation, I made a PDF document and made it accessible on GitHub. The code explanation document will go through each block of code and also have some high-level explanation. Please see the code explanation at https://github.com/zotbins/simple_waste_data_logger/blob/main/code_explanation.pdf. You can download the PDF and view it in a PDF reader of your choice.
+However, if you want a more in-depth explanation, I made a PDF document and made it accessible on GitHub. The code explanation document will go through each block of code and also have some high-level explanation. Please see the code explanation at https://github.com/zotbins/waste_watcher/blob/main/v0/code_explanation.md
 
 ## 9. Format and Install Your MicroSD Card
 1. Insert micro SD card into your computer
@@ -171,7 +171,7 @@ However, if you want a more in-depth explanation, I made a PDF document and made
 
 ## 10. 3D Printing the Case
 
-![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/sensor_mod_v0_enclosure.png)
+![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/sensor_mod_v0_enclosure.png)
 
 1. Download the the STL files from https://github.com/zotbins/simple_waste_data_logger/tree/main/stl_files
 2. Infill: 10%
@@ -183,7 +183,7 @@ However, if you want a more in-depth explanation, I made a PDF document and made
 
 Currently, this design only fits on a bin with a 1cm width lip. You may have to modify the CAD file. I have included a Fusion360 file called *sensor_mod_handle v9.f3d*, in the [github repository](https://github.com/zotbins/waste_watcher), that you can modify to fit your needs. Another option is to design your own handles for your bin, I made the case pretty modular where you can create a custom attachment with M3 screws.
 
-![](https://raw.githubusercontent.com/zotbins/waste_watcher/development/v0/guide_images/feature_photo2.jpg)
+![](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/feature_photo2.jpg)
 
 
 ## 11. Start Data Logging

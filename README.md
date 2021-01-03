@@ -1,7 +1,7 @@
 # Introduction
 I wanted a way to keep track of how much waste I was generating just to be more environmentally conscious. So I created this project as an automated way to help keep track of waste accumulation through fullness measurements while also taking pictures of the objects thrown away.
 
-To achieve this, I use the HC-SR04 ultrasonic sensor along with the ESP32-CAM and save the measurements to a micro SD card. Doing this type of waste tracking is called a waste audit, which is a common practice used by universities to keep track of waste goals while also looking for opportunities increasing waste diversion rates.
+![feature photo](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/feature_photo.jpg)
 
 # ZotBins Community Edition
 
