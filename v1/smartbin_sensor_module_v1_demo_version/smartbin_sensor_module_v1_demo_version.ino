@@ -33,11 +33,10 @@ const char* WIFI_SSID = "REPLACE_WITH_YOUR_WIFI_SSID";
 const char* WIFI_PASS = "REPLACE_WITH_YOUR_WIFI_PASSWORD";
 
 // === http request parameters ===
-String serverName = "http://192.168.x.xxx/"; //REPLACE WITH YOUR SERVERNAME
-String serverName2 = "192.168.x.xxx";
-String serverPath = "/post/image";     // The default serverPath should be upload.php
-const int serverPort = 80;
-String bin_id = "1"; // REPLACE WITH YOUR BIN ID
+String serverName = "192.168.x.xxx"; //REPLACE WITH YOUR SERVERNAME
+String serverPath = "/post/image";
+const int serverPort = 80; // replace with your port number
+String bin_id = "1";
 WiFiClient client;
 
 
@@ -165,10 +164,10 @@ String sendPhoto() {
     ESP.restart();
   }
 
-  if (debug) Serial.println("Connecting to server: " + serverName2);
+  if (debug) Serial.println("Connecting to server: " + serverName);
   if (debug) Serial.println("Connecting to port: " + serverPort);
 
-  if (client.connect(serverName2.c_str(), serverPort)) {
+  if (client.connect(serverName.c_str(), serverPort)) {
     if (debug) Serial.println("Connection successful!");
 
     // === initialize header and tail of the file ====
@@ -182,7 +181,7 @@ String sendPhoto() {
 
     if (debug) {
       Serial.println("POST " + serverPath + " HTTP/1.1");
-      Serial.println("Host: " + serverName2);
+      Serial.println("Host: " + serverName);
       Serial.println("Content-Length: " + String(totalLen));
       Serial.println("Content-Type: multipart/form-data; boundary=RandomNerdTutorials");
       Serial.println();
@@ -190,7 +189,7 @@ String sendPhoto() {
     }
     // === start post request ===
     client.println("POST " + serverPath + " HTTP/1.1");
-    client.println("Host: " + serverName2);
+    client.println("Host: " + serverName);
     client.println("Content-Length: " + String(totalLen));
     client.println("Content-Type: multipart/form-data; boundary=RandomNerdTutorials");
     client.println();
@@ -238,7 +237,7 @@ String sendPhoto() {
     if (debug) Serial.println(getBody);
   }
   else {
-    getBody = "Connection to " + serverName2 +  " failed.";
+    getBody = "Connection to " + serverName +  " failed.";
     if (debug) Serial.println(getBody);
   }
   return getBody;
@@ -289,7 +288,7 @@ void post_fullness() {
   if ((WiFi.status() == WL_CONNECTED)) {
     HTTPClient http;
 
-    http.begin(serverName+"post/fullness");
+    http.begin(serverName+"/post/fullness");
 
     http.addHeader("Content-Type", "application/json");
     if (debug) Serial.println("{\"data\":[{\"datetime\":\"" + datetimeStamp  +"\",\"fullness\":"+ fullness +",\"bin_id\":"+ bin_id +"}]}");
