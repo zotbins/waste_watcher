@@ -8,6 +8,9 @@ This is the alpha version of the ZotBins Community Edition Waste Watcher, a sens
 - Portable Battery Powered Module
 - Saves data locally to SD card
 - Modular case design
+- Metrics
+    - bin fullness
+    - waste images
 
 ## Steps
 1. Supplies

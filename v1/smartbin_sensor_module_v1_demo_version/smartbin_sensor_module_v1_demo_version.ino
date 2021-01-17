@@ -26,7 +26,6 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
-
 // === wifi credentials ===
 // replace with your network credentials
 const char* WIFI_SSID = "REPLACE_WITH_YOUR_WIFI_SSID";
@@ -38,7 +37,6 @@ String serverPath = "/post/image";
 const int serverPort = 80; // replace with your port number
 String bin_id = "1";
 WiFiClient client;
-
 
 // === peripherals pin assignment ===
 const int ultrasonicTrigPin = 13;
@@ -59,7 +57,7 @@ long duration; // units: microseconds, for HC-SR04
 int distance; // units:cm, for HC-SR04
 int fullness; //units:cm, the bin fullness
 String datetimeStamp;
-bool debug = true;
+bool debug = false;
 
 // Define NTP Client to get time
 WiFiUDP ntpUDP;
@@ -288,7 +286,8 @@ void post_fullness() {
   if ((WiFi.status() == WL_CONNECTED)) {
     HTTPClient http;
 
-    http.begin(serverName+"/post/fullness");
+    if (debug) Serial.println("http://"+serverName+"/post/fullness");
+    http.begin("http://"+serverName+"/post/fullness");
 
     http.addHeader("Content-Type", "application/json");
     if (debug) Serial.println("{\"data\":[{\"datetime\":\"" + datetimeStamp  +"\",\"fullness\":"+ fullness +",\"bin_id\":"+ bin_id +"}]}");
@@ -299,7 +298,7 @@ void post_fullness() {
     http.end(); // Free the resources
   }
   else {
-    Serial.println("WiFi Disconnected");
+    if (debug) Serial.println("WiFi Disconnected");
   }
 }
 
