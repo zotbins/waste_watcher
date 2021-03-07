@@ -1,0 +1,1 @@
+I also shared the project on Osh Park where you can purchase the PCB from this [link](https://oshpark.com/shared_projects/k4JhZQq0). All gerber files are also included in this folder if you wish to send to a different manufacturer or fabricate it yourself. 
