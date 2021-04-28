@@ -125,7 +125,7 @@ Now that you have all the software setup. Let's start with programming the ESP32
 
 
 3. Plug in your FTDI Adapter USB side to the computer and make sure that your computer is able to recognize the device. If your computer does not recognize the device follow these steps:
-    - Locate the required drivers here: https://www.ftdichip.com/Drivers/D2XX.htm
+    - Locate the required drivers here: https://ftdichip.com/drivers/d2xx-drivers/
     - Scroll down to the table and locate the driver for your operating system and follow the instructions
     - If you have a Windows machine scroll down to the table and locate the first row and click on the hyperlink labeled as Available as a setup executable
     - Once downloaded, run the executable as Administrator
