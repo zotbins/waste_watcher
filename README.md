@@ -9,16 +9,13 @@ This is the first step of a multi-part project of creating a smart waste ecosyst
 
 # Quick Start
 Please follow the appropriate build guide for the waste watcher version of your choosing.
-- [v0 [Last Updated - 2021 January 2 ]](https://github.com/zotbins/waste_watcher/blob/main/v0/guide.md) 
+- [Waste Watcher Guide](https://github.com/zotbins/waste_watcher/blob/main/v0/guide.md)
     - Measures bin fullness and collects waste images
     - Saves data and images locally
     - Syncs with NTP Client to generate UTC datetime stamps
-- v1 [In Progress]
-    - Measures bin fullness and collects waste images
-    - Saves data and images to HTTP server
-    - Syncs with NTP Client to generate UTC datetime stamps
 
-# Contributing 
+
+# Contributing
 
 Here are some following ways you can contribute:
 - For this specific repository feel free to submit any issues regarding bugs. This will really help other users who may be interested in building this project and also help me create a debugging guide for the community.
