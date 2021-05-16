@@ -289,12 +289,12 @@ void setup() {
   esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
   Serial.println("Setup ESP32 to sleep for every " + String(TIME_TO_SLEEP) + " Seconds");
 
+  // === sd card setup === 
+  sdSetup();
+  
   // === ultrasonic setup ===
   pinMode(ultrasonicTrigPin, OUTPUT);
   pinMode(ultrasonicEchoPin, INPUT);
-
-  // === sd card setup === 
-  sdSetup();
   
   // === wifi setup ===
   Serial.print("Connecting to ");
