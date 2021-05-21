@@ -30,14 +30,14 @@
 
 // === wifi credentials ===
 // replace with your network credentials
-const char* WIFI_SSID = "YOUR_WIFI_SSID_HERE";
-const char* WIFI_PASS = "YOUR_WIFI_PASSWORD_HERE";
+const char* WIFI_SSID = "YOUR_WIFI_SSID";
+const char* WIFI_PASS = "YOUR_WIFI_PASS";
 
 // === http request parameters ===
-String serverName = "YOUR_HTTP_SERVERNAME"; //eg. "192.168.1.100"
+String serverName = "YOUR_SERVER_NAME"; // only the serverName
 String serverPath = "/image";
 const int serverPort = 80;  // port 80 is default, change if different
-String bin_id = "3";
+String bin_id = "1"; // "1" is default, change if different
 WiFiClient client;
 
 // === peripherals pin assignment ===
@@ -49,8 +49,8 @@ const int ultrasonicEchoPin = 12;
 const int nmosGate = 15;
 
 // === deep sleep ===
-#define uS_TO_S_FACTOR 1000000 /* conversion factor for usec to sec */
-#define TIME_TO_SLEEP 1800 /* TIME ESP32 will go to sleep in sec */
+#define uS_TO_S_FACTOR 1000000 //conversion factor for usec to sec
+#define TIME_TO_SLEEP 1800   // TIME ESP32 will sleep for 1800 sec
 
 // === other parameters ===
 const int binHeight = 50; // units: cm, used to calculate fullness
