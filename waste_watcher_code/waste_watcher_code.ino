@@ -26,19 +26,7 @@
 #include <HTTPClient.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-
-
-// === wifi credentials ===
-// replace with your network credentials
-const char* WIFI_SSID = "YOUR_WIFI_SSID";
-const char* WIFI_PASS = "YOUR_WIFI_PASS";
-
-// === http request parameters ===
-String serverName = "YOUR_SERVER_NAME"; // only the serverName
-String serverPath = "/image";
-const int serverPort = 80;  // port 80 is default, change if different
-String bin_id = "1"; // "1" is default, change if different
-WiFiClient client;
+#include "config.h"
 
 // === peripherals pin assignment ===
 const int ultrasonicTrigPin = 13;
@@ -159,8 +147,8 @@ String sendPhoto() {
   String getBody;
 
   // === turn on flash ===
-  digitalWrite(FLASH_LED_PIN,HIGH);
   rtc_gpio_hold_dis(GPIO_NUM_4);
+  digitalWrite(FLASH_LED_PIN,HIGH);
 
   // === take the photo ===
   camera_fb_t * fb = NULL;
@@ -193,7 +181,7 @@ String sendPhoto() {
     uint32_t totalLen = imageLen + extraLen;
 
     if (debug) {
-      Serial.println("POST " + serverPath + " HTTP/1.1");
+      Serial.println("POST /image HTTP/1.1");
       Serial.println("Host: " + serverName);
       Serial.println("Content-Length: " + String(totalLen));
       Serial.println("Content-Type: multipart/form-data; boundary=RandomNerdTutorials");
@@ -201,7 +189,7 @@ String sendPhoto() {
       Serial.print(head);
     }
     // === start post request ===
-    client.println("POST " + serverPath + " HTTP/1.1");
+    client.println("POST /image HTTP/1.1");
     client.println("Host: " + serverName);
     client.println("Content-Length: " + String(totalLen));
     client.println("Content-Type: multipart/form-data; boundary=RandomNerdTutorials");
