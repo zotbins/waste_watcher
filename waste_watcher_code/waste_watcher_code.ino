@@ -40,11 +40,6 @@ const int nmosGate = 15;
 #define uS_TO_S_FACTOR 1000000 //conversion factor for usec to sec
 #define TIME_TO_SLEEP 1800   // TIME ESP32 will sleep for 1800 sec
 
-// === other parameters ===
-const int binHeight = 50; // units: cm, used to calculate fullness
-const int ultraMinRange = 2; //units: cm, min. limit of accurate HC-SR04 reading
-const int ultraMaxRange = 400; //units: cm, max. limit of accurate HC-SR04 reading
-
 // === system variables ===
 long duration; // units: microseconds, for HC-SR04
 int distance; // units:cm, for HC-SR04
