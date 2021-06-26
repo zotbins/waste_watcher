@@ -1,6 +1,6 @@
 // *Author*: Owen Yang
 // *Description*: A simple waste auditing data logger script for the ESP32 CAM.
-// *Acknowledgements*: Random Nerd Tutorials 
+// *Acknowledgements*: Random Nerd Tutorials
 // *License*: Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files.
 // The above copyright notice and this permission notice shall be included in all
@@ -23,37 +23,22 @@
 #include "soc/rtc_cntl_reg.h"  // Disable brownout problems
 #include "driver/rtc_io.h"
 #include <WiFi.h>
-#include <HTTPClient.h>[j
+#include <HTTPClient.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
+#include "config.h"
 
-
-// === wifi credentials ===
-// replace with your network credentials
-const char* WIFI_SSID = "REPLACE_WITH_YOUR_WIFI_SSID";
-const char* WIFI_PASS = "REPLACE_WITH_YOUR_WIFI_PASSWORD";
-
-// === http request parameters === 
-String serverName = "192.168.x.xxx"; //REPLACE WITH YOUR SERVERNAME
-String serverPath = "/image";
-const int serverPort = 80;
-String bin_id = "1";
-WiFiClient client;
-
-
-// === peripherals pin assignment === 
+// === peripherals pin assignment ===
 const int ultrasonicTrigPin = 13;
-const int ultrasonicEchoPin = 12;  
-const int nmosGate = 15; // this uses the Rx pin on the ESP-32 CAM, make sure to change rtc_hold_function parameters below if you change this
+const int ultrasonicEchoPin = 12;
 
-// === deep sleep === 
-#define uS_TO_S_FACTOR 1000000 /* conversion factor for usec to sec */
-#define TIME_TO_SLEEP 1800 /* TIME ESP32 will go to sleep in sec */ 
+// this uses the Rx pin on the ESP-32 CAM, make sure to change rtc_hold_function
+// parameters below if you change this
+const int nmosGate = 15;
 
-// === other parameters ===
-const int binHeight = 50; // units: cm, used to calculate fullness
-const int ultraMinRange = 2; //units: cm, min. limit of accurate HC-SR04 reading
-const int ultraMaxRange = 400; //units: cm, max. limit of accurate HC-SR04 reading
+// === deep sleep ===
+#define uS_TO_S_FACTOR 1000000 //conversion factor for usec to sec
+#define TIME_TO_SLEEP 1800   // TIME ESP32 will sleep for 1800 sec
 
 // === system variables ===
 long duration; // units: microseconds, for HC-SR04
@@ -111,7 +96,7 @@ void configInitCamera(){
   config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG;
 
-  //=== init with high specs to pre-allocate larger buffers === 
+  //=== init with high specs to pre-allocate larger buffers ===
   if(psramFound()){
     if (debug) Serial.println("PSRAM found");
     config.frame_size = FRAMESIZE_UXGA;
@@ -124,13 +109,13 @@ void configInitCamera(){
     config.fb_count = 1;
   }
 
-  // === Init Camera === 
+  // === Init Camera ===
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK) {
     if (debug) Serial.printf("Camera init failed with error 0x%x", err);
     return;
   }
-  
+
   // Drop down frame size for higher initial frame rate
   sensor_t * s = esp_camera_sensor_get();
   s->set_framesize(s, FRAMESIZE_UXGA);  // UXGA|SXGA|XGA|SVGA|VGA|CIF|QVGA|HQVGA|QQVGA
@@ -143,22 +128,32 @@ void getDateTime() {
   }
   datetimeStamp = timeClient.getFormattedDate(); //raw format: 2018-04-30T16:00:13Z
   datetimeStamp.replace("T"," ");
-  datetimeStamp.replace("Z",""); 
+  datetimeStamp.replace("Z","");
 
   if (debug) Serial.println(datetimeStamp);
-  
-  //=== end the client === 
+
+  //=== end the client ===
   timeClient.end();
 }
 
 String sendPhoto() {
-  // === function parameters ==== 
+  // === function parameters ====
   String getAll;
   String getBody;
 
-  // === take the photo === 
+  // === turn on flash ===
+  rtc_gpio_hold_dis(GPIO_NUM_4);
+  digitalWrite(FLASH_LED_PIN,HIGH);
+
+  // === take the photo ===
   camera_fb_t * fb = NULL;
   fb = esp_camera_fb_get();
+
+  // === turn off flash ===
+  digitalWrite(FLASH_LED_PIN,LOW);
+  rtc_gpio_hold_en(GPIO_NUM_4);
+
+  // ==== retake if camera capture fails ===
   if(!fb) {
     if (debug) Serial.println("Camera capture failed");
     delay(1000);
@@ -179,9 +174,9 @@ String sendPhoto() {
     uint32_t imageLen = fb->len;
     uint32_t extraLen = head.length() + tail.length();
     uint32_t totalLen = imageLen + extraLen;
-  
+
     if (debug) {
-      Serial.println("POST " + serverPath + " HTTP/1.1");
+      Serial.println("POST /image HTTP/1.1");
       Serial.println("Host: " + serverName);
       Serial.println("Content-Length: " + String(totalLen));
       Serial.println("Content-Type: multipart/form-data; boundary=RandomNerdTutorials");
@@ -189,7 +184,7 @@ String sendPhoto() {
       Serial.print(head);
     }
     // === start post request ===
-    client.println("POST " + serverPath + " HTTP/1.1");
+    client.println("POST /image HTTP/1.1");
     client.println("Host: " + serverName);
     client.println("Content-Length: " + String(totalLen));
     client.println("Content-Type: multipart/form-data; boundary=RandomNerdTutorials");
@@ -248,24 +243,26 @@ void fullnessRead(){
   rtc_gpio_hold_dis(GPIO_NUM_15); // disable the rtc hold on nmos gate
   digitalWrite(nmosGate,HIGH);
   delayMicroseconds(500); //units: us
+
+  // === collect ultrasonicc readings ===
   for (int i = 0; i < 5; ++i )
   {
-    // clear trigger pin 
+    // clear trigger pin
     digitalWrite(ultrasonicTrigPin,LOW);
     delayMicroseconds(2); //units: us
-  
-    // Toggle trigPin HIGH then LOW 
+
+    // Toggle trigPin HIGH then LOW
     digitalWrite(ultrasonicTrigPin,HIGH);
     delayMicroseconds(10); //units: us
     digitalWrite(ultrasonicTrigPin,LOW);
-  
-    // Reads echoPin and returns sound wave travel time 
+
+    // Reads echoPin and returns sound wave travel time
     duration = pulseIn(ultrasonicEchoPin, HIGH);
     distance = duration*0.034/2;
     if (debug) Serial.print("Raw Distance: ");
     if (debug) Serial.print(distance);
     if (debug) Serial.println();
-    
+
     // Filters out out of range values
     if (distance<ultraMinRange || distance>ultraMaxRange) {
       distance = -1;
@@ -274,23 +271,23 @@ void fullnessRead(){
     else {
       // calculate fullness
       fullness = binHeight - distance;
-      return; 
+      return;
     }
   }
-  
+
   // Turn off signal pins
   digitalWrite(ultrasonicTrigPin,LOW);
   digitalWrite(ultrasonicTrigPin,LOW);
   digitalWrite(nmosGate,LOW);
-  rtc_gpio_hold_en(GPIO_NUM_15); // enaable the rtc hold on the nmos gate 
+  rtc_gpio_hold_en(GPIO_NUM_15); // enable the rtc hold on the nmos gate
 }
 
 void post_fullness() {
   if ((WiFi.status() == WL_CONNECTED)) {
     HTTPClient http;
 
-    if (debug) Serial.println("http://"+serverName+"/fullness");
-    http.begin("http://"+serverName+"/fullness");
+    if (debug) Serial.println("http://"+serverName+":"+serverPort+"/fullness");
+    http.begin("http://"+serverName+":"+serverPort+"/fullness");
 
     http.addHeader("Content-Type", "application/json");
     if (debug) Serial.println("{\"data\":[{\"datetime\":\"" + datetimeStamp  +"\",\"fullness\":"+ fullness +",\"bin_id\":"+ bin_id +"}]}");
@@ -298,7 +295,7 @@ void post_fullness() {
 
     if (debug) Serial.print("HTTP Response code: ");
     if (debug) Serial.println(httpResponseCode);
-    http.end(); // Free the resources 
+    http.end(); // Free the resources
   }
   else {
     if (debug) Serial.println("WiFi Disconnected");
@@ -306,10 +303,11 @@ void post_fullness() {
 }
 
 void setup() {
+
   if (debug) Serial.begin(115200);
   if (debug) Serial.println("Setup has started...");
 
-  // === deep sleep setup === 
+  // === deep sleep setup ===
   esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
   if (debug) Serial.println("Setup ESP32 to sleep for every " + String(TIME_TO_SLEEP) + " Seconds");
 
@@ -333,38 +331,34 @@ void setup() {
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
   }
-  
-  // === camera setup === 
+
+  // === camera setup ===
   pinMode( FLASH_LED_PIN, OUTPUT); // Setup flash
-  configInitCamera(); // Setup camera 
+  configInitCamera(); // Setup camera
 
   if (debug) Serial.println("Setup finished");
   if (debug) Serial.println();
 
   // === take a photo ===
-  rtc_gpio_hold_dis(GPIO_NUM_4);
-  digitalWrite(FLASH_LED_PIN,HIGH);
-  sendPhoto(); 
-  digitalWrite(FLASH_LED_PIN,LOW);
-  rtc_gpio_hold_en(GPIO_NUM_4);
+  sendPhoto();
 
   // === get distance reading ===
   fullnessRead();
 
   //=== update the datetime stamp ===
   getDateTime();
-  
+
   // === write data to HTTP Server ===
   post_fullness();
-  
+
   // === sleep timer ===
   if (debug) Serial.println("Going to sleep now");
   delay(1000);
-  if (debug) Serial.flush(); 
+  if (debug) Serial.flush();
   esp_deep_sleep_start();
-  
+
 }
 
 void loop() {
-  
+
 }
