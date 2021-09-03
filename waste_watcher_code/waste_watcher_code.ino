@@ -176,7 +176,7 @@ String sendPhoto() {
     uint32_t totalLen = imageLen + extraLen;
 
     if (debug) {
-      Serial.println("POST /image HTTP/1.1");
+      Serial.println("POST /image?key="+apiKey+" HTTP/1.1");
       Serial.println("Host: " + serverName);
       Serial.println("Content-Length: " + String(totalLen));
       Serial.println("Content-Type: multipart/form-data; boundary=RandomNerdTutorials");
@@ -184,7 +184,7 @@ String sendPhoto() {
       Serial.print(head);
     }
     // === start post request ===
-    client.println("POST /image HTTP/1.1");
+    client.println("POST /image?key="+apiKey+" HTTP/1.1");
     client.println("Host: " + serverName);
     client.println("Content-Length: " + String(totalLen));
     client.println("Content-Type: multipart/form-data; boundary=RandomNerdTutorials");
@@ -286,8 +286,8 @@ void post_fullness() {
   if ((WiFi.status() == WL_CONNECTED)) {
     HTTPClient http;
 
-    if (debug) Serial.println("http://"+serverName+":"+serverPort+"/fullness");
-    http.begin("http://"+serverName+":"+serverPort+"/fullness");
+    if (debug) Serial.println("http://"+serverName+":"+serverPort+"/fullness?key="+apiKey);
+    http.begin("http://"+serverName+":"+serverPort+"/fullness?key="+apiKey);
 
     http.addHeader("Content-Type", "application/json");
     if (debug) Serial.println("{\"data\":[{\"datetime\":\"" + datetimeStamp  +"\",\"fullness\":"+ fullness +",\"bin_id\":"+ bin_id +"}]}");
