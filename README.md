@@ -1,7 +1,7 @@
 # Introduction
 I wanted a way to keep track of how much waste I was generating just to be more environmentally conscious. So I created this project as an automated way to help keep track of waste accumulation through fullness measurements while also taking pictures of the objects thrown away.
 
-![feature photo](https://raw.githubusercontent.com/zotbins/zbceblog/master/images/feb2021-images/waste_watcher.jpg)
+![feature photo](https://zotbins.github.io/zbceblog/assets/img/feb2021-images/waste_watcher.jpg)
 
 # ZotBins Community Edition
 
