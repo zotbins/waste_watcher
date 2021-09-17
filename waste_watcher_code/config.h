@@ -8,6 +8,7 @@ String serverName = "<YOUR_SERVERNAME>"; // only the serverName, don't add http:
 const int serverPort = 80;  // port 80 is default, change if different
 String bin_id = "1"; // "1" is default, change if different
 WiFiClient client;
+String apiKey = "<YOUR_API_KEY>";
 
 // === other parameters ===
 const int binHeight = 50; // units: cm, used to calculate fullness
