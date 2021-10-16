@@ -1,7 +1,7 @@
 # Introduction
 I wanted a way to keep track of how much waste I was generating just to be more environmentally conscious. So I created this project as an automated way to help keep track of waste accumulation through fullness measurements while also taking pictures of the objects thrown away.
 
-![feature photo](https://raw.githubusercontent.com/zotbins/waste_watcher/main/v0/guide_images/feature_photo.jpg)
+![feature photo](guide/guide_images/feature_photo.jpg)
 
 # ZotBins Community Edition
 
@@ -9,7 +9,7 @@ This is the first step of a multi-part project of creating a smart waste ecosyst
 
 # Quick Start
 Please follow the appropriate build guide for the waste watcher version of your choosing.
-- [Waste Watcher Guide](https://github.com/zotbins/waste_watcher/blob/main/v0/guide.md)
+- [Waste Watcher Guide](guide/guide.md)
     - Measures bin fullness and collects waste images
     - Saves data and images locally
     - Syncs with NTP Client to generate UTC datetime stamps
